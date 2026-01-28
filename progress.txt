@@ -93,3 +93,30 @@ Files changed:
 
 ---
 
+## 2026-01-28 20:30 - US-004
+- Created test file tests/language-selection.spec.ts implementing language selection functionality
+- Implemented two test scenarios:
+  - Test 1: Navigate to English Wikipedia from home page
+  - Test 2: Navigate to Spanish Wikipedia from home page
+- Tests navigate to https://www.wikipedia.org
+- Tests use Page Object Model's selectLanguage() method for clicking language links
+- Tests verify navigation to correct language domain (en.wikipedia.org, es.wikipedia.org)
+- Tests verify page loads successfully by checking for search input visibility
+- Tests verify page title contains 'Wikipedia'
+- All tests pass locally (npx playwright test tests/language-selection.spec.ts)
+- Typecheck passes
+
+Files changed:
+- tests/language-selection.spec.ts (created)
+- prd.json (updated US-004 passes to true)
+
+**Learnings for future iterations:**
+- Language-specific Wikipedia pages use #searchInput selector for the search box (different from home page's input[type="search"])
+- Logo element (.mw-logo-icon) on language-specific Wikipedia pages exists in DOM but is hidden (similar to home page logo issue)
+- Use #searchInput as reliable visible element for verifying page load on language-specific Wikipedia pages
+- Language navigation works reliably using Page Object Model's selectLanguage() method with language codes
+- Both English and Spanish Wikipedia pages have consistent DOM structure for search elements
+- Always wait for 'domcontentloaded' state after navigation to ensure page is ready for assertions
+
+---
+

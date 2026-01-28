@@ -75,8 +75,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 4,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed: Created language-selection.spec.ts with tests for English and Spanish language navigation. Tests verify domain navigation and page load. All tests pass and typecheck passes."
     },
     {
       "id": "US-005",
