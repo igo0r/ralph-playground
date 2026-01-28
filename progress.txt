@@ -169,3 +169,32 @@ Files changed:
 
 ---
 
+## 2026-01-28 20:40 - US-007
+- Created GitHub Actions workflow file at .github/workflows/playwright.yml
+- Configured workflow triggers for push to main branch and pull requests
+- Configured workflow to run on Ubuntu latest runner
+- Added Node.js setup step with LTS version (using actions/setup-node@v4)
+- Added dependency installation step using npm ci
+- Added Playwright browser installation step (npx playwright install --with-deps chromium)
+- Added test execution step (npx playwright test)
+- Added artifact upload on failure (uploads playwright-report/ with 30-day retention)
+- Workflow will show clear pass/fail status in GitHub UI via workflow status checks
+- Typecheck passes
+
+Files changed:
+- .github/workflows/playwright.yml (created)
+- prd.json (updated US-007 passes to true)
+
+**Learnings for future iterations:**
+- GitHub Actions workflows should be placed in .github/workflows/ directory
+- Use actions/checkout@v4 to checkout code in GitHub Actions
+- Use actions/setup-node@v4 with 'lts/*' for latest LTS Node.js version
+- Use npm ci instead of npm install for CI environments (faster, more reliable)
+- Playwright browsers must be installed with --with-deps flag to install system dependencies on Ubuntu
+- Use actions/upload-artifact@v4 for uploading test results/reports
+- Use if: failure() condition to only upload artifacts when tests fail
+- Workflow status automatically appears in GitHub UI for PRs and commits
+- retention-days parameter controls how long artifacts are kept (default is 90 days)
+
+---
+
