@@ -68,3 +68,28 @@ Files changed:
 - Use Playwright's modern locator API (page.locator()) instead of deprecated $ selectors
 
 ---
+## 2026-01-28 20:15 - US-003
+- Created test file tests/search.spec.ts implementing search functionality test
+- Test navigates to https://www.wikipedia.org
+- Test verifies search box is visible before performing search
+- Test enters search term 'Playwright' and submits via Enter key
+- Test verifies navigation occurred (URL changed from home page)
+- Test verifies search term appears in page content
+- Test verifies page is either search results or article page
+- All tests pass locally (npx playwright test tests/search.spec.ts)
+- Typecheck passes
+
+Files changed:
+- tests/search.spec.ts (created)
+- prd.json (updated US-003 passes to true)
+
+**Learnings for future iterations:**
+- Wikipedia home page logo (.central-featured-logo) exists in DOM but is not visible (CSS hidden/opacity), so cannot use it for page load verification
+- Search input (input[type="search"]) IS visible and reliable for verifying page load
+- Use `await expect(locator).toBeVisible()` for assertions instead of custom verifyPageLoad() methods
+- Wikipedia search redirects to either article pages (/wiki/) or search results (contains 'search')
+- Page content check using `page.textContent('body')` is reliable for verifying search term appears on result page
+- Wait for 'domcontentloaded' state before checking navigation results
+
+---
+
