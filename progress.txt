@@ -1,0 +1,200 @@
+## Codebase Patterns
+- Use `npm run typecheck` to validate TypeScript configuration
+- Test scripts are defined in package.json: test, test:headed, test:ui, test:report
+- Project follows Playwright best practices with separate tests/ and pages/ directories
+- TypeScript configuration requires at least one .ts file to pass type checking
+
+---
+
+## 2026-01-28 19:58 - US-001
+- Initialized Playwright project with TypeScript support
+- Created playwright.config.ts with Chromium browser configuration
+- Created tsconfig.json with strict type checking and Playwright types
+- Added test scripts to package.json (test, test:headed, test:ui, test:report, typecheck)
+- Created project structure (tests/, pages/ directories)
+- Added .gitignore for node_modules and test artifacts
+
+Files changed:
+- package.json (created)
+- package-lock.json (created)
+- playwright.config.ts (created)
+- tsconfig.json (created)
+- .gitignore (created)
+- tests/ (directory created)
+- pages/ (directory created)
+
+**Learnings for future iterations:**
+- The project starts from scratch with no existing package.json
+- TypeScript requires at least one .ts file in the include paths to pass type checking
+- Playwright config should use Chromium only as specified in requirements
+- Use `npm run typecheck` to validate configuration
+- Test structure follows Playwright conventions: tests/ for test files, pages/ for Page Object Models
+
+---
+
+## 2026-01-28 20:03 - US-002
+- Created WikipediaHomePage Page Object Model class in pages/WikipediaHomePage.ts
+- Implemented comprehensive locators for key elements:
+  - Logo, search input, search button
+  - Major language links (en, es, fr, de, it, pt, ru, ja, zh, ar)
+- Implemented action methods:
+  - goto() - Navigate to Wikipedia home page
+  - search() - Enter search term and submit with Enter key
+  - searchWithButton() - Enter search term and submit with button click
+  - selectLanguage() - Navigate to specific language edition
+  - verifyPageLoad() - Verify page loaded successfully
+- Implemented assertion methods:
+  - isLogoVisible() - Check if logo is visible
+  - isSearchBoxVisible() - Check if search box is visible
+  - isSearchBoxEnabled() - Check if search box is enabled
+  - getLanguageLinksCount() - Get count of language links
+  - isLanguageLinkVisible() - Check if specific language link is visible
+  - getPageTitle() - Get page title
+  - getCurrentUrl() - Get current URL
+- All public methods include JSDoc comments for documentation
+- Used modern Playwright locators (no deprecated methods)
+
+Files changed:
+- pages/WikipediaHomePage.ts (created)
+- prd.json (updated US-002 passes to true)
+
+**Learnings for future iterations:**
+- Wikipedia home page uses ID selectors with pattern #js-link-box-{languageCode} for language links
+- Wikipedia logo uses class selector '.central-featured-logo'
+- Search input uses input[type="search"] selector
+- Page Object Model pattern encapsulates all locators and actions in a single class
+- JSDoc comments improve IDE intellisense and code maintainability
+- All assertion methods should include timeout parameters and error handling for reliability
+- Use Playwright's modern locator API (page.locator()) instead of deprecated $ selectors
+
+---
+## 2026-01-28 20:15 - US-003
+- Created test file tests/search.spec.ts implementing search functionality test
+- Test navigates to https://www.wikipedia.org
+- Test verifies search box is visible before performing search
+- Test enters search term 'Playwright' and submits via Enter key
+- Test verifies navigation occurred (URL changed from home page)
+- Test verifies search term appears in page content
+- Test verifies page is either search results or article page
+- All tests pass locally (npx playwright test tests/search.spec.ts)
+- Typecheck passes
+
+Files changed:
+- tests/search.spec.ts (created)
+- prd.json (updated US-003 passes to true)
+
+**Learnings for future iterations:**
+- Wikipedia home page logo (.central-featured-logo) exists in DOM but is not visible (CSS hidden/opacity), so cannot use it for page load verification
+- Search input (input[type="search"]) IS visible and reliable for verifying page load
+- Use `await expect(locator).toBeVisible()` for assertions instead of custom verifyPageLoad() methods
+- Wikipedia search redirects to either article pages (/wiki/) or search results (contains 'search')
+- Page content check using `page.textContent('body')` is reliable for verifying search term appears on result page
+- Wait for 'domcontentloaded' state before checking navigation results
+
+---
+
+## 2026-01-28 20:30 - US-004
+- Created test file tests/language-selection.spec.ts implementing language selection functionality
+- Implemented two test scenarios:
+  - Test 1: Navigate to English Wikipedia from home page
+  - Test 2: Navigate to Spanish Wikipedia from home page
+- Tests navigate to https://www.wikipedia.org
+- Tests use Page Object Model's selectLanguage() method for clicking language links
+- Tests verify navigation to correct language domain (en.wikipedia.org, es.wikipedia.org)
+- Tests verify page loads successfully by checking for search input visibility
+- Tests verify page title contains 'Wikipedia'
+- All tests pass locally (npx playwright test tests/language-selection.spec.ts)
+- Typecheck passes
+
+Files changed:
+- tests/language-selection.spec.ts (created)
+- prd.json (updated US-004 passes to true)
+
+**Learnings for future iterations:**
+- Language-specific Wikipedia pages use #searchInput selector for the search box (different from home page's input[type="search"])
+- Logo element (.mw-logo-icon) on language-specific Wikipedia pages exists in DOM but is hidden (similar to home page logo issue)
+- Use #searchInput as reliable visible element for verifying page load on language-specific Wikipedia pages
+- Language navigation works reliably using Page Object Model's selectLanguage() method with language codes
+- Both English and Spanish Wikipedia pages have consistent DOM structure for search elements
+- Always wait for 'domcontentloaded' state after navigation to ensure page is ready for assertions
+
+---
+
+## 2026-01-28 - US-005
+- Created test file tests/homepage-ui.spec.ts implementing home page UI component verification
+- Implemented 4 test scenarios:
+  - Test 1: Verify Wikipedia logo element is attached to DOM
+  - Test 2: Verify search box is visible and enabled
+  - Test 3: Verify at least 5 major language links are visible (English, Spanish, French, German, Italian)
+  - Test 4: Verify page title contains 'Wikipedia'
+- Tests navigate to https://www.wikipedia.org using Page Object Model
+- Tests use Playwright's expect().toBeVisible(), toBeEnabled(), and toBeAttached() assertions
+- All tests pass locally (npx playwright test tests/homepage-ui.spec.ts) - 4/4 passed
+- Typecheck passes
+
+Files changed:
+- tests/homepage-ui.spec.ts (created)
+- prd.json (updated US-005 passes to true)
+
+**Learnings for future iterations:**
+- Logo element check should use toBeAttached() instead of toBeVisible() because the logo exists in DOM but is not visible due to CSS styling
+- Search input visibility is reliable for UI verification on Wikipedia home page
+- Major language links can be verified using isLanguageLinkVisible() method from Page Object Model
+- Use expect().toBeEnabled() to verify interactive elements are ready for user input
+- getLanguageLinksCount() returns total count of language links, useful for verifying minimum required languages
+- Page title assertion with toContain() is more flexible than exact match for dynamic content
+
+---
+
+## 2026-01-28 20:35 - US-006
+- Ran full Playwright test suite (npx playwright test)
+- Verified all 7 tests pass with 0 failures:
+  - 1 test for search functionality (tests/search.spec.ts)
+  - 2 tests for language selection (tests/language-selection.spec.ts)
+  - 4 tests for home page UI components (tests/homepage-ui.spec.ts)
+- Test execution completed in 6.5s using 4 workers
+- HTML report generated at playwright-report/index.html (535KB)
+- Typecheck passes (npm run typecheck)
+
+Files changed:
+- prd.json (updated US-006 passes to true)
+
+**Learnings for future iterations:**
+- The full test suite includes 7 tests total across 3 test files
+- Playwright automatically generates HTML reports in playwright-report/ directory during test runs
+- HTML report provides detailed test execution results including screenshots and traces (when configured)
+- Test execution report shows clear pass/fail status with execution time
+- All test scenarios (search, language selection, UI components) work reliably end-to-end
+- Running `npx playwright test` without arguments runs all tests in parallel using multiple workers (4 workers in this case)
+
+---
+
+## 2026-01-28 20:40 - US-007
+- Created GitHub Actions workflow file at .github/workflows/playwright.yml
+- Configured workflow triggers for push to main branch and pull requests
+- Configured workflow to run on Ubuntu latest runner
+- Added Node.js setup step with LTS version (using actions/setup-node@v4)
+- Added dependency installation step using npm ci
+- Added Playwright browser installation step (npx playwright install --with-deps chromium)
+- Added test execution step (npx playwright test)
+- Added artifact upload on failure (uploads playwright-report/ with 30-day retention)
+- Workflow will show clear pass/fail status in GitHub UI via workflow status checks
+- Typecheck passes
+
+Files changed:
+- .github/workflows/playwright.yml (created)
+- prd.json (updated US-007 passes to true)
+
+**Learnings for future iterations:**
+- GitHub Actions workflows should be placed in .github/workflows/ directory
+- Use actions/checkout@v4 to checkout code in GitHub Actions
+- Use actions/setup-node@v4 with 'lts/*' for latest LTS Node.js version
+- Use npm ci instead of npm install for CI environments (faster, more reliable)
+- Playwright browsers must be installed with --with-deps flag to install system dependencies on Ubuntu
+- Use actions/upload-artifact@v4 for uploading test results/reports
+- Use if: failure() condition to only upload artifacts when tests fail
+- Workflow status automatically appears in GitHub UI for PRs and commits
+- retention-days parameter controls how long artifacts are kept (default is 90 days)
+
+---
+
