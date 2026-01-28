@@ -1,0 +1,33 @@
+## Codebase Patterns
+- Use `npm run typecheck` to validate TypeScript configuration
+- Test scripts are defined in package.json: test, test:headed, test:ui, test:report
+- Project follows Playwright best practices with separate tests/ and pages/ directories
+- TypeScript configuration requires at least one .ts file to pass type checking
+
+---
+
+## 2026-01-28 19:58 - US-001
+- Initialized Playwright project with TypeScript support
+- Created playwright.config.ts with Chromium browser configuration
+- Created tsconfig.json with strict type checking and Playwright types
+- Added test scripts to package.json (test, test:headed, test:ui, test:report, typecheck)
+- Created project structure (tests/, pages/ directories)
+- Added .gitignore for node_modules and test artifacts
+
+Files changed:
+- package.json (created)
+- package-lock.json (created)
+- playwright.config.ts (created)
+- tsconfig.json (created)
+- .gitignore (created)
+- tests/ (directory created)
+- pages/ (directory created)
+
+**Learnings for future iterations:**
+- The project starts from scratch with no existing package.json
+- TypeScript requires at least one .ts file in the include paths to pass type checking
+- Playwright config should use Chromium only as specified in requirements
+- Use `npm run typecheck` to validate configuration
+- Test structure follows Playwright conventions: tests/ for test files, pages/ for Page Object Models
+
+---
