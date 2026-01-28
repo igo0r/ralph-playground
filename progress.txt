@@ -31,3 +31,40 @@ Files changed:
 - Test structure follows Playwright conventions: tests/ for test files, pages/ for Page Object Models
 
 ---
+
+## 2026-01-28 20:03 - US-002
+- Created WikipediaHomePage Page Object Model class in pages/WikipediaHomePage.ts
+- Implemented comprehensive locators for key elements:
+  - Logo, search input, search button
+  - Major language links (en, es, fr, de, it, pt, ru, ja, zh, ar)
+- Implemented action methods:
+  - goto() - Navigate to Wikipedia home page
+  - search() - Enter search term and submit with Enter key
+  - searchWithButton() - Enter search term and submit with button click
+  - selectLanguage() - Navigate to specific language edition
+  - verifyPageLoad() - Verify page loaded successfully
+- Implemented assertion methods:
+  - isLogoVisible() - Check if logo is visible
+  - isSearchBoxVisible() - Check if search box is visible
+  - isSearchBoxEnabled() - Check if search box is enabled
+  - getLanguageLinksCount() - Get count of language links
+  - isLanguageLinkVisible() - Check if specific language link is visible
+  - getPageTitle() - Get page title
+  - getCurrentUrl() - Get current URL
+- All public methods include JSDoc comments for documentation
+- Used modern Playwright locators (no deprecated methods)
+
+Files changed:
+- pages/WikipediaHomePage.ts (created)
+- prd.json (updated US-002 passes to true)
+
+**Learnings for future iterations:**
+- Wikipedia home page uses ID selectors with pattern #js-link-box-{languageCode} for language links
+- Wikipedia logo uses class selector '.central-featured-logo'
+- Search input uses input[type="search"] selector
+- Page Object Model pattern encapsulates all locators and actions in a single class
+- JSDoc comments improve IDE intellisense and code maintainability
+- All assertion methods should include timeout parameters and error handling for reliability
+- Use Playwright's modern locator API (page.locator()) instead of deprecated $ selectors
+
+---
