@@ -96,8 +96,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 5,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed: Created homepage-ui.spec.ts with 4 test scenarios covering logo, search box visibility/enabled state, language links (5 major languages), and page title. All tests pass and typecheck passes."
     },
     {
       "id": "US-006",

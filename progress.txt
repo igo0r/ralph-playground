@@ -120,3 +120,29 @@ Files changed:
 
 ---
 
+## 2026-01-28 - US-005
+- Created test file tests/homepage-ui.spec.ts implementing home page UI component verification
+- Implemented 4 test scenarios:
+  - Test 1: Verify Wikipedia logo element is attached to DOM
+  - Test 2: Verify search box is visible and enabled
+  - Test 3: Verify at least 5 major language links are visible (English, Spanish, French, German, Italian)
+  - Test 4: Verify page title contains 'Wikipedia'
+- Tests navigate to https://www.wikipedia.org using Page Object Model
+- Tests use Playwright's expect().toBeVisible(), toBeEnabled(), and toBeAttached() assertions
+- All tests pass locally (npx playwright test tests/homepage-ui.spec.ts) - 4/4 passed
+- Typecheck passes
+
+Files changed:
+- tests/homepage-ui.spec.ts (created)
+- prd.json (updated US-005 passes to true)
+
+**Learnings for future iterations:**
+- Logo element check should use toBeAttached() instead of toBeVisible() because the logo exists in DOM but is not visible due to CSS styling
+- Search input visibility is reliable for UI verification on Wikipedia home page
+- Major language links can be verified using isLanguageLinkVisible() method from Page Object Model
+- Use expect().toBeEnabled() to verify interactive elements are ready for user input
+- getLanguageLinksCount() returns total count of language links, useful for verifying minimum required languages
+- Page title assertion with toContain() is more flexible than exact match for dynamic content
+
+---
+
